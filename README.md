@@ -7,7 +7,7 @@ This is a node for Node-RED. It is designed to provide a temporary cache of inpu
 
 The primary purpose of the node is as a companion to [node-red-contrib-uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which provides an easy web app builder for Node-RED. While uibuilder provides a dynamic communications channel between the Node-RED server and each connected client browser, when a client connects (or the user reloads the page), any dynamic data is lost and the client has to wait for future messages to arrive. This node allows that issue to be resolved. uibuilder sends control messages when clients connect, disconnect and when they are ready to receive data. These messages come from port 2 on the uibuilder node and you can feed that port directly into an InfoCache node. By default, the "ready for content" uibuilder control message will trigger the InfoCache node to send the contents of the cache for that client only.
 
-There are a number of settings that you can apply that will control how much data is cached and how/when it is cleared. You may need to use some or all of these if you are passing a large number of messages/topics through the cache. **No hard limits are applied** other than those settings and it is perfectly possible to **crash Node-RED** by filling up the memory if you overdo the cache.
+There are a number of settings that you can apply that will control how much data is cached and how/when it is cleared. You may need to use some or all of these if you are passing a large number of messages/topics through the cache. **No hard limits are applied** other than those settings and it is perfectly possible to **crash Node-RED** by filling up the memory if you overdo the cache. Send a message with the format `{"cache-control":"CLEAR"} to empty the cache, see [Clearing the Cache](#clear-the-cache) for details.
 
 ## Contents
 <!-- TOC -->
@@ -17,6 +17,8 @@ There are a number of settings that you can apply that will control how much dat
     - [Contents](#contents)
     - [Additional Documentation](#additional-documentation)
     - [Features](#features)
+        - [Likely future features](#likely-future-features)
+        - [Possible future features](#possible-future-features)
     - [Known Issues](#known-issues)
     - [To Do](#to-do)
     - [Changes](#changes)
@@ -24,13 +26,9 @@ There are a number of settings that you can apply that will control how much dat
     - [Install](#install)
     - [Node Instance Settings](#node-instance-settings)
         - [Future settings](#future-settings)
-    - [Recognised Input msg Structures](#recognised-input-msg-structures)
-        - [Replay](#replay)
-            - [Topic = REPLAY](#topic--replay)
-            - [uibuilder "ready for content" control msg](#uibuilder-ready-for-content-control-msg)
-        - [Reset](#reset)
-            - [Topic = RESET](#topic--reset)
-            - [uibuilder "reset cache" control msg](#uibuilder-reset-cache-control-msg)
+    - [Recognised Input Message Structures](#recognised-input-message-structures)
+        - [Replay cached messages](#replay-cached-messages)
+        - [Clear the Cache](#clear-the-cache)
     - [Examples](#examples)
     - [Discussions and suggestions](#discussions-and-suggestions)
     - [Contributing](#contributing)
@@ -46,20 +44,29 @@ _[back to top](#contents)_
 
 ## Features
 
-- Cache by topic
-- Cache maximum number of messages (optionally by topic)
-- Cache messages for a maximum time (in seconds)
+- Cache inbound messages by topic
 - Replay for all or just one "client"
 - Identify clients by a specified message property (defaults to "_socketId" to work with uibuilder)
 - Replay via control messages
+- Simply send all uibuilder control messages, no further flow logic required.
+  uibuilder control messages will not be cached.
+- Manual cache clear via control messages
+
+### Likely future features
+
+- Cache maximum number of messages (optionally by topic)
+- Cache messages for a maximum time (in seconds)
 - Reset after replay if desired
-- Manual reset via control messages
-- Simply send all uibuilder control messages, no further flow logic required
+
+### Possible future features
+
+- Maybe add cache-control:NEW to allow sending only of cached messages since the last cache-control:REPLAY or NEW.
 
 _[back to top](#contents)_
 
 ## Known Issues
 
+None at this time
 
 _[back to top](#contents)_
 
@@ -77,17 +84,17 @@ _[back to top](#contents)_
 
 ## Dependencies
 
-See the package.json file.
+See the [package.json](package.json) file.
 
 ## Install
 
-Run the following command in your Node-RED user directory (typically `~/.node-red`):
+Install via the palette manage in the Node-RED admin ui (no restart needed). Alternatively run the following command in your Node-RED user directory (typically `~/.node-red`):
 
 ```
 npm install node-red-contrib-infocache
 ```
 
-Run/restart Node-RED and add an instance of the InfoCache node.
+then restart Node-RED and add an instance of the InfoCache node.
 
 _[back to top](#contents)_
 
@@ -107,13 +114,13 @@ If not empty, cached messages will only be retained for the number of _seconds_ 
 
 **`# Messages to retain` (number, optional)**
 
-The number of messages that will be retained (by topic if "Retain by Topic" is true). The oldest msg will be dropped when a new msg arrives once the limit is reached. The default is null which means that **all** msgs will be retained and it is up to you to trim the size using the reset control messages.
+The number of messages that will be retained (by topic if "Retain by Topic" is true). The oldest message will be dropped when a new message arrives once the limit is reached. The default is null which means that **all** messages will be retained and it is up to you to trim the size using the reset control messages.
 
 **WARNING**: If you let the cache get too large, it **will** crash Node-RED.
 
 **`Retain by Topic?` (boolean)**
 
-If `true`, topics will be retained by topic. Specifically the number of msgs to retain will be by topic.
+If `true`, topics will be retained by topic. Specifically the number of messages to retain will be by topic.
 
 **`Reset After Replay?` (boolean, optional=false)**
 
@@ -121,7 +128,7 @@ Defaults to `false`. If `true`, the cache will be emptied after a replay event. 
 
 **`Client Id` (string, optional='_socketId')**
 
-If not specified, will default to the "_socketId" property on input control msgs. When an input control msg is received, if it has the specified property, cache operations will be for that client id only. The default is designed to work closely with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which uses Socket.IO for dynamic communications between the server and the client.
+If not specified, will default to the "_socketId" property on input control messages. When an input control message is received, if it has the specified property, cache operations will be for that client id only. The default is designed to work closely with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which uses Socket.IO for dynamic communications between the server and the client.
 
 ### Future settings
 These settings are planned for future releases.
@@ -133,96 +140,52 @@ Allows the selection of the cache storage to be used. Initially only "Memory" wi
 
 _[back to top](#contents)_
 
-## Recognised Input msg Structures
+## Recognised Input Message Structures
 
-The InfoCache nodes can be controlled by specific input msgs as shown here. InfoCache is designed to work alongside [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder)  as well as working independently.
+The InfoCache nodes can be controlled by specific input messages as shown here. InfoCache is designed to work alongside [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder)  as well as working independently.
 
-You can let a [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder)  node send all of it's control msgs (port #2) to InfoCache, everything not listed here will be ignored.
+You can let a [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) node send all of it's control messages (port #2) to InfoCache, everything not listed here will be ignored. uibuilder control messages have a property "uibuilderCtrl". Any message recieved with that property will not be cached.
 
-Any input msg structure not listed here will be treated as normal data and subject to caching as per the settings.
+Any input message with a "cache-control" property will not be cached.
 
-### Replay
+### Replay cached messages
 
-To replay the cache, you can use either of the following msg formats
-
-#### Topic = REPLAY
+To replay the cache, you can use either of the following message formats
 
 This first format will replay the master cache and assumes that the output will go to all connected clients.
 ```json
 {
-    "topic": "REPLAY",
-    "reset": false
+    "cache-control": "REPLAY",
 }
 ```
-The reset property is optional and defaults to `false`. Set it to `true` to empty the cache after the replay.
 
 Or, if you want to send the cache to a specific client
 ```json
 {
-    "topic": "REPLAY",
+    "cache-control": "REPLAY",
     "_socketId": "<Socket.IO client id>",
-    "reset": false
 }
 ```
-The reset property is optional and defaults to `false`. Set it to `true` to empty the cache _only for the specific client_ after the replay.
+Note that the "_socketId" property can be set to an alternative client identifier property in the settings.
 
-Note that "_socketId" can be set to an alternative client identifier property in the settings.
+### Clear the Cache
+To clear the cache either totally or just for a specific client id.
 
-#### uibuilder "ready for content" control msg
-Use these formats of msgs when using InfoCache with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) to ensure that newly connected or reloaded client apps get the cache of data delivered to them.
-
-Deliver to all connected clients (probably not what you want unless you only ever have a single client connected):
-```json
-{
-    "type": "ready for content",
-    "reset": false
-}
-```
-Or, if you want to send the cache to a specific client (the most likely case):
-```json
-{
-    "type": "ready for content",
-    "_socketId": "<Socket.IO client id>",
-    "reset": false
-}
-```
-
-### Reset
-While the replay control messages also take a reset flag, you can send a reset control message instead so that you can have full control over the reset process. Don't forget that the node iteslf may also auto-reset depending on the settings.
-
-#### Topic = RESET
 Reset the master cache, also resets all client-specific caches:
 ```json
 {
-    "topic": "RESET"
+    "cache-control": "CLEAR"
 }
 ```
 
 To reset the cache for a specific client:
 ```json
 {
-    "topic": "RESET",
+    "cache-control": "CLEAR",
     "_socketId": "<Socket.IO client id>"
 }
 ```
 Note that "_socketId" can be set to an alternative client identifier property in the settings.
-
-#### uibuilder "reset cache" control msg
-Use these formats of msgs when using InfoCache with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) to ensure that newly connected or reloaded client apps get the cache of data delivered to them.
-
-Deliver to all connected clients (probably not what you want unless you only ever have a single client connected):
-```json
-{
-    "type": "reset cache"
-}
-```
-Or, if you want to reset the cache for a specific client (the most likely case):
-```json
-{
-    "type": "reset cache",
-    "_socketId": "<Socket.IO client id>"
-}
-```
 
 _[back to top](#contents)_
 
