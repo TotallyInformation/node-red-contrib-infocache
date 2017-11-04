@@ -34,18 +34,29 @@ Cache &amp; replay messages. Optionally by topic and client id
 
 There may be a little more information available in the [WIKI](https://github.com/TotallyInformation/node-red-contrib-infocache/wiki).
 
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `#f03c15`
+
 ## Introduction
 
 This is a node for Node-RED. It is designed to provide a temporary cache of input messages so that they can be replayed on request.
 
 The primary purpose of the node is as a companion to [node-red-contrib-uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which provides an easy web app builder for Node-RED. While uibuilder provides a dynamic communications channel between the Node-RED server and each connected client browser, when a client connects (or the user reloads the page), any dynamic data is lost and the client has to wait for future messages to arrive. This node allows that issue to be resolved. uibuilder sends control messages when clients connect, disconnect and when they are ready to receive data. These messages come from port 2 on the uibuilder node and you can feed that port directly into an InfoCache node. By default, the "ready for content" uibuilder control message will trigger the InfoCache node to send the contents of the cache for that client only.
 
-<div style="background-color:pink;border:1px solid silver;padding:2px">There are a number of settings that you can apply that will control how much data is cached and how/when it is cleared. You may need to use some or all of these if you are passing a large number of messages/topics through the cache. **No hard limits are applied** other than those settings and it is perfectly possible to **crash Node-RED** by filling up the memory if you overdo the cache.</div>
+There are a number of settings that you can apply that will control how much data is cached and how/when it is cleared. You may need to use some or all of these if you are passing a large number of messages/topics through the cache. **No hard limits are applied** other than those settings and it is perfectly possible to **crash Node-RED** by filling up the memory if you overdo the cache.
 
 _[back to top](#contents)_
 
 ## Features
 
+- Cache by topic
+- Cache maximum number of messages (optionally by topic)
+- Cache messages for a maximum time (in seconds)
+- Replay for all or just one "client"
+- Identify clients by a specified message property (defaults to "_socketId" to work with uibuilder)
+- Replay via control messages
+- Reset after replay if desired
+- Manual reset via control messages
+- Simply send all uibuilder control messages, no further flow logic required
 
 _[back to top](#contents)_
 
