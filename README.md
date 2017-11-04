@@ -108,6 +108,13 @@ Each instance of the InfoCache node has the following settings available.
 
 Only used in the Node-RED admin UI.
 
+**`Client Id` (string, optional='_socketId')**
+
+If not specified, will default to the "_socketId" property on input control messages. When an input control message is received, if it has the specified property, cache operations will be for that client id only. The default is designed to work closely with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which uses Socket.IO for dynamic communications between the server and the client.
+
+### Future settings
+These settings are planned for future releases.
+
 **`Retention Time` (number, optional)**
 
 If not empty, cached messages will only be retained for the number of _seconds_ input. This overrides the # messages to retain so if the number limit hasn't been reached but the time has, messages will be removed anyway.
@@ -118,20 +125,9 @@ The number of messages that will be retained (by topic if "Retain by Topic" is t
 
 **WARNING**: If you let the cache get too large, it **will** crash Node-RED.
 
-**`Retain by Topic?` (boolean)**
-
-If `true`, topics will be retained by topic. Specifically the number of messages to retain will be by topic.
-
 **`Reset After Replay?` (boolean, optional=false)**
 
 Defaults to `false`. If `true`, the cache will be emptied after a replay event. _Note_ that this is only likely to be useful if you don't need to handle multiple clients. It saves having to have logic to send a reset control message if you always want to clear the cache after a replay.
-
-**`Client Id` (string, optional='_socketId')**
-
-If not specified, will default to the "_socketId" property on input control messages. When an input control message is received, if it has the specified property, cache operations will be for that client id only. The default is designed to work closely with [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder) which uses Socket.IO for dynamic communications between the server and the client.
-
-### Future settings
-These settings are planned for future releases.
 
 **`Storage Engine` (dropdown)**
 
