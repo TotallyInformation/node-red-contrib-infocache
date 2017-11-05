@@ -11,11 +11,13 @@ Being worked on now. May already be partially implemented but have further work 
 - Simply send all uibuilder control messages, no further flow logic required.
   uibuilder control messages will not be cached.
 - Manual cache clear via control messages
+- Cache maximum number of messages by topic
+- Add slight delay on replay along with a deduplication of requests
+  to handle the fact that front-ends need to send a trigger on window.load AND on socket connected.
 
 # Next
 This is what needs working on next.
 
-- Cache maximum number of messages (optionally by topic)
 - Cache messages for a maximum time (in seconds)
 - Reset after replay if desired
 
