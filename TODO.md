@@ -18,6 +18,7 @@ Being worked on now. May already be partially implemented but have further work 
 # Next
 This is what needs working on next.
 
+- Allow the replay delay time to be changed in the admin ui
 - Cache messages for a maximum time (in seconds)
 - Reset after replay if desired
 

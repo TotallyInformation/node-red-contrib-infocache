@@ -52,11 +52,12 @@ _[back to top](#contents)_
   uibuilder control messages will not be cached.
 - Manual cache clear via control messages
 - Cache maximum number of messages by topic
-- Slight delay on replay along with a deduplication of requests
+- Slight delay (250ms) on replay along with a deduplication of requests
   to handle the fact that front-ends need to send a trigger on window.load AND on socket connected.
 
 ### Likely future features
 
+- Allow the replay delay time to be changed in the admin ui
 - Cache messages for a maximum time (in seconds)
 - Reset after replay if desired
 
