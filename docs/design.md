@@ -38,7 +38,15 @@ Controls the whole cache.
    Example msg (example from a client reloading the page):
 
    ```json
-   {"uibuilderCtrl":"ready for content","cacheControl":"REPLAY","from":"client","_socketId":"/nr/uib#Bxtu968meXIZhcpSAAAH","_uibAuth":{},"topic":"uib1Topic","_msgid":"70d3a693.1b7348"}
+   {
+       "uibuilderCtrl": "ready for content",
+       "cacheControl": "REPLAY",
+       "from": "client",
+       "_socketId": "/nr/uib#Bxtu968meXIZhcpSAAAH",
+       "_uibAuth": {},
+       "topic": "uib1Topic",
+       "_msgid": "70d3a693.1b7348"
+   }
    ```
 
 - Cache Clear

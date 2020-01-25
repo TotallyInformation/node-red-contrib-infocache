@@ -4,7 +4,7 @@ If you need to raise an issue, bug report or enhancement request against infocac
 ## Index of documents
 
 {% for page in site.pages %}
-  * [{{ page.title | page.name }}]({{ page.html_url }}) - {{ page.description }}
+  * [{{ page.title || page.name }}]({{ page.url }}) - {{ page.description }}
 {% endfor %}
 
 {% comment %}
