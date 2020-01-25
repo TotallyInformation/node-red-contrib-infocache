@@ -6,18 +6,24 @@ description: >
 
 [[toc]]
 
-## Main Features
+## Main Requirements
 
-- Uses Node-RED's native Context Storage feature
-- Integrates with uibuilder's cache control messages
+- Use Node-RED's native Context Storage feature
+- Integrate with uibuilder's cache control messages
 - Control (clear or replay) the cache using a control input message
 - Control the cache by topic or client/user id
-- Control the overall size of the cache
-- Allows replay of a specific position in the cache
+- Control the overall size of the cache by restricting the maximum number of messages (by topic/client/user)
+- Allow replay of a specific position in the cache
 - Multi-instance - use as many infocash nodes as memory allows, uses node context so all data is isolated.
-- 
+- Identify clients by a specified message property (defaults to "_socketId" to work with uibuilder)
+- Take any uibuilder control message. Only respond to cache control messages. No further flow logic required.
+- uibuilder control messages will not be cached.
+- Slight delay (250ms) on replay along with a deduplication of requests (debounce)
+  to handle the fact that front-ends need to send a trigger on window.load AND on socket connected.
+- Allow reverse replay. Default is first-in-first out (FIFO) but should be able to replay as LIFO (last in, first out).
+- Allow replay of first, last or specific index position only.
 
-## Options
+## Options Needed
 
 - Cache Data by:
    -  any message (no categorisation, flat record of input messages)
@@ -67,3 +73,7 @@ Controls the cache for a single client or user
 - Allow replay in reverse order?
 - Button to manually clear the cache (possibly several buttons to clear the full cache or a topic/client/user)?
 - Option to auto-clear if store or variable name is changed?
+- Maybe add cache-control:NEW to allow sending only of cached messages since the last cache-control:REPLAY or NEW.
+- Allow the replay delay time to be changed in the admin ui
+- Cache messages for a maximum time (in seconds)
+- Reset after replay if desired

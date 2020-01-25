@@ -1,3 +1,15 @@
+<#
+ # Build and deploy GitHub pages based documentation
+ #>
+
+#npm run docs:build
+cd docs/.vuepress/dist
+git push -f -u origin master:gh-pages
+cd ../..
+
+<#
+ # Only run the rest of this ONCE!
+
 # build
 npm run docs:build
 
@@ -22,3 +34,5 @@ git branch --set-upstream-to origin/gh-pages
 git push -f -u origin master:gh-pages
 
 cd ../..
+
+ #>

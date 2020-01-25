@@ -8,7 +8,7 @@ module.exports = {
     
     themeConfig: {
         // https://vuepress.vuejs.org/theme/default-theme-config.html#sidebar
-        searchPlaceholder: 'Search h1/h2 text ...',
+        searchPlaceholder: 'Search h2/h3 text ...',
         lastUpdated: 'Updated', // string | boolean
         sidebar: [
             '/',
