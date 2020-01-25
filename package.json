@@ -1,0 +1,74 @@
+{
+    "name": "node-red-contrib-infocache",
+    "version": "0.0.1-dev.1",
+    "description": "A uibuilder compatible caching node",
+    "scripts": {
+        "start": "node ./bin/mergehtml",
+        "postinstall": "node ./bin/postinstall",
+        "build": "node ./bin/mergehtml",
+        "watchbuild": "node ./bin/watchhtml",
+        "prepush": "npm run packfe && npm run build",
+        "push": "git push origin",
+        "pull": "git pull origin",
+        "presync": "npm run pull",
+        "sync": "npm run push",
+        "listbin": "ls ./node_modules/bin",
+        "npmtags": "npm dist-tag ls node-red-contrib-infocache",
+        "npmtagnext": "npm dist-tag add node-red-contrib-infocache@$npm_package_version next",
+        "gittags": "git tag",
+        "gittag": "git tag -a v%npm_package_version%",
+        "gitpushtags": "git push origin --tags"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/jquery": "*",
+        "@types/node-red": "*",
+        "replace-in-file": "^3.4.4"
+    },
+    "node-red": {
+        "version": ">=1",
+        "nodes": {
+            "infocache": "nodes/infocache.js"
+        },
+        "notyetnodes": {}
+    },
+    "engines": {
+        "node": ">=8.16"
+    },
+    "directories": {
+        "bin": "./bin",
+        "lib": "./nodes"
+    },
+    "main": "./nodes/infocache.js",
+    "bin": {
+        "mergehtml": "./bin/mergehtml.js",
+        "watchhtml": "./bin/watchhtml.js"
+    },
+    "browserslist": [
+        "> 0.5%",
+        "maintained node versions",
+        "last 2 versions",
+        "not dead",
+        "not ie < 11"
+    ],
+    "keywords": [
+        "node-red",
+        "ui",
+        "gui",
+        "dashboard",
+        "uibuilder",
+        "cache",
+        "caching"
+    ],
+    "homepage": "https://github.com/TotallyInformation/node-red-contrib-infocache",
+    "bugs": "https://github.com/TotallyInformation/node-red-contrib-infocache/issues",
+    "author": {
+        "name": "Julian Knight",
+        "url": "https://github.com/TotallyInformation"
+    },
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TotallyInformation/node-red-contrib-infocache.git"
+    }
+}
