@@ -17,13 +17,18 @@
         "npmtagnext": "npm dist-tag add node-red-contrib-infocache@$npm_package_version next",
         "gittags": "git tag",
         "gittag": "git tag -a v%npm_package_version%",
-        "gitpushtags": "git push origin --tags"
+        "gitpushtags": "git push origin --tags",
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs"
     },
     "dependencies": {},
     "devDependencies": {
         "@types/jquery": "*",
         "@types/node-red": "*",
-        "replace-in-file": "^3.4.4"
+        "markdown-it-footnote": "^3.0.2",
+        "markdown-it-task-lists": "^2.1.1",
+        "replace-in-file": "^3.4.4",
+        "vuepress": "^1.2.0"
     },
     "node-red": {
         "version": ">=1",

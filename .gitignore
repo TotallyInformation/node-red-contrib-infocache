@@ -1,3 +1,6 @@
+# VuePress
+docs/.vuepress/dist
+
 # VScode
 .vscode
 .vscode/cSpell.json

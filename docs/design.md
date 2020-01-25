@@ -1,8 +1,10 @@
 ---
-Title: InfoCache Design Notes
-Description: >
+title: InfoCache Design Notes
+description: >
     Documents the design and thinking behind infocache along with ideas for the future.
 ---
+
+[[toc]]
 
 ## Main Features
 
