@@ -3,14 +3,14 @@ If you need to raise an issue, bug report or enhancement request against infocac
 
 ## Index of documents
 
-1. [Design](./design.md) - documents the design and thinking behind infocache along with ideas for the future.
-
 {% for page in site.pages %}
-  * [{{ page.title }}]({{ page.html_url }})
+  * [{{ page.title | page.name }}]({{ page.html_url }}) - {{ page.description }}
 {% endfor %}
 
+{% comment %}
 ## My other repositories
 
 {% for repository in site.github.public_repositories %}
   * [{{ repository.name }}]({{ repository.html_url }})
 {% endfor %}
+{% endcomment %}
