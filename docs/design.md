@@ -8,7 +8,7 @@
 - Control the cache by topic or client/user id
 - Control the overall size of the cache
 - Allows replay of a specific position in the cache
-- Multi-instance - chose a unique variable name to allow many different caches or the same name to use the same cache in different flows
+- Multi-instance - use as many infocash nodes as memory allows, uses node context so all data is isolated.
 - 
 
 ## Options
