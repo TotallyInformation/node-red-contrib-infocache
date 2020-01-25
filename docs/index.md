@@ -1,5 +1,3 @@
-# node-red-contrib-infocache Documentation
-
 Welcome to the documentation site for node-red-contrib-infocache.
 
 ## Index
