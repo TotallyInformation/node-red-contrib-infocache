@@ -2,7 +2,7 @@
  # Build and deploy GitHub pages based documentation
  #>
 
-#npm run docs:build
+#npm run builddocs
 cd docs/.vuepress/dist
 git add -A
 git commit -m 'deploy'
@@ -13,7 +13,7 @@ cd ../..
  # Only run the rest of this ONCE!
 
 # build
-npm run docs:build
+npm run builddocs
 
 # navigate into the build output directory
 cd docs/.vuepress/dist

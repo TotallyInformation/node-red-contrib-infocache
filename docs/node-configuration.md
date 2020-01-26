@@ -2,6 +2,8 @@
 title: How to configure the infocache node
 ---
 
+NOTE: This document is outdated and needs to be reworked.
+
 Each instance of the InfoCache node has the following settings available.
 
 **Note** that no caching strategy can cover every requirement. If you need to handle different cache strategies, use multiple instances of this node.

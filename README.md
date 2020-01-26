@@ -124,7 +124,7 @@ When contributing code, please use the following coding standards:
 
 ## Developers/Contributors
 
-- [Julian Knight](https://github.com/TotallyInformation)1
+- [Julian Knight](https://github.com/TotallyInformation)
 
 <a href="https://stackexchange.com/users/1375993/julian-knight"><img src="https://stackexchange.com/users/flair/1375993.png" width="208" height="58" alt="profile for Julian Knight on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for Julian Knight on Stack Exchange, a network of free, community-driven Q&amp;A sites" /></a>
 

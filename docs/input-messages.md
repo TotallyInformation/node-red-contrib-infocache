@@ -1,3 +1,9 @@
+---
+title: Input Message Definitions
+---
+
+NOTE: This document is outdated and needs to be reworked.
+
 ## Recognised Input Message Structures
 
 The InfoCache nodes can be controlled by specific input messages as shown here. InfoCache is designed to work alongside [uibuilder](https://github.com/TotallyInformation/node-red-contrib-uibuilder)  as well as working independently.

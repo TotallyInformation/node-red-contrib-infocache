@@ -15,6 +15,8 @@ module.exports = {
             '/design',
             '/node-configuration',
             '/input-messages',
+            '/CHANGELOG',
+            '/TODO',
             ['https://github.com/TotallyInformation/node-red-contrib-infocache', 'GitHub Code']
             //['/page-b', 'Explicit link text']
         ],
