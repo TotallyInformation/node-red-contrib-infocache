@@ -13,6 +13,8 @@ module.exports = {
         sidebar: [
             '/',
             '/design',
+            '/node-configuration',
+            '/input-messages',
             ['https://github.com/TotallyInformation/node-red-contrib-infocache', 'GitHub Code']
             //['/page-b', 'Explicit link text']
         ],
