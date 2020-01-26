@@ -4,6 +4,8 @@
 
 #npm run docs:build
 cd docs/.vuepress/dist
+git add -A
+git commit -m 'deploy'
 git push -f -u origin master:gh-pages
 cd ../..
 
