@@ -1,1 +1,38 @@
-<div>HELP!</div>
+<p>
+    A general-purpose caching node that saves/replays messages.
+    Is able to use <a href="https://flows.nodered.org/node/node-red-contrib-uibuilder" taget="_blank">uibuilder's</a> cache control messages but is fine to use without uibuilder.
+</p>
+<h3>Input</h3>
+    <p>
+        The whole msg will be stored in the cache.
+        However, several properties will be removed before storage:
+    </p>
+    <dl class="message-properties">
+        <dt>res and req<span class="property-type">object</span></dt>
+        <dd>
+            The <code>res</code> (result) and <code>req</code> (request) properties are created by the ExpressJS web server build-in to Node-RED.
+            They are extremely large and recursive which means that they cannot be serialised in order to save them.
+        </dd>
+        <dt>_auth &amp; _uibAuth<span class="property-type">object</span></dt>
+        <dd>
+            Authorisation and authentication info. May be sensitive so removed from store.
+            Will be added from the control msg (from the client) when a replay is requested.
+        </dd>
+    </dl>
+<h3>Outputs</h3>
+    <p>
+        Standard input messages are passed through without change to the output.
+    </p>
+    <p>
+        uibuilder control messages are not passed through.
+    </p>
+    <p>
+        On a cache replay control request, the requested cache entries are replayed in the requested order (FIFO by default).
+        Replayed messages are not quite exact copies of the original message, see above for the differences.
+    </p>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">string | buffer</span></dt>
+        <dd></dd>
+    </dl>
+<h3>Details</h3>
+<p>Some more information about the node.</p>

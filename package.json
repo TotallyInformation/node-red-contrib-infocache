@@ -19,8 +19,7 @@
         "gittag": "git tag -a v%npm_package_version%",
         "gitpushtags": "git push origin --tags",
         "devdocs": "vuepress dev docs",
-        "builddocs": "vuepress build docs",
-        "postbuilddocs": "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ./deploy-docs.ps1"
+        "builddocs": "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ./deploy-docs.ps1"
     },
     "dependencies": {},
     "devDependencies": {

@@ -1,5 +1,8 @@
 module.exports = {
-    // See https://vuepress.vuejs.org/config/
+    /** See https://vuepress.vuejs.org/config/
+     * https://vuepress.tools/
+     * https://github.com/vuepressjs/awesome-vuepress
+     */
     
     title: 'Documentation for node-red-contrib-infocache',
     description: 'Just playing around',
@@ -10,6 +13,22 @@ module.exports = {
         // https://vuepress.vuejs.org/theme/default-theme-config.html#sidebar
         searchPlaceholder: 'Search h2/h3 text ...',
         lastUpdated: 'Updated', // string | boolean
+        nav: [
+            {text: 'WIKI', link: 'https://github.com/TotallyInformation/node-red-contrib-uibuilder/wiki', rel:''},
+            {text: 'Much Ado About IT (Blog)', link: 'https://it.knightnet.org.uk', rel:''},
+            {
+                text: 'Node-RED',
+                items: [
+                    {text: 'Node-RED Home Page', link: 'https://nodered.org/', rel:''},
+                    {text: 'Discourse Forum', link: 'https://discourse.nodered.org/', rel:''},
+                    {text: 'Flows', link: 'https://flows.nodered.org/', rel:''},
+                    {text: 'Documentation', link: 'https://nodered.org/docs/', rel:''},
+                    {text: 'Blog', link: 'https://nodered.org/blog/', rel:''},
+                    {text: 'YouTube', link: 'https://www.youtube.com/results?search_query=node-red'},
+                    {text: 'GitHub', link: 'https://github.com/node-red'},
+                ],
+            },
+        ],
         sidebar: [
             '/',
             '/design',
@@ -17,7 +36,6 @@ module.exports = {
             '/input-messages',
             '/CHANGELOG',
             '/TODO',
-            ['https://github.com/TotallyInformation/node-red-contrib-infocache', 'GitHub Code']
             //['/page-b', 'Explicit link text']
         ],
 
@@ -68,7 +86,28 @@ module.exports = {
         },
     },
 
-    // plugins: [
-    //     '@vuepress/back-to-top',
-    // ],
+    locales: {
+        "/": {
+            lang: "en-GB"
+        }
+    },
+    plugins: [
+        // '@vuepress/back-to-top',
+        [
+            '@vuepress/last-updated',
+            {
+                transformer: (timestamp, lang) => {
+                    var ts = new Date(timestamp)
+                    var yr = ts.getFullYear()
+                    var mm = ("0" + (ts.getMonth()+1)).substr(-2)
+                    var dd = ("0" + ts.getDate()).substr(-2)
+                    var hh = ("0" + ts.getHours()).substr(-2)
+                    var nn = ("0" + ts.getMinutes()).substr(-2)
+                    var ss = ("0" + ts.getSeconds()).substr(-2)
+
+                    return yr + '-' + mm + '-' + dd + ' ' + hh + ':' + nn + ':' + ss
+                }
+            }
+        ],
+    ],
   }

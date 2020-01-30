@@ -30,8 +30,8 @@ function mergehtml(nodeName, srcFiles) {
         files: './nodes/' + nodeName + '.html',
         from: [
             /(<script type="text\/javascript">)(.|\n)*?(<\/script>)/gmi,
-            /(<script type="text\/x-red" data-template-name="NODENAME">)(.|\n)*?(<\/script>)/gmi,
-            /(<script type="text\/x-red" data-help-name="NODENAME">)(.|\n)*?(<\/script>)/gmi,
+            /(<script type="text\/html" data-template-name="NODENAME">)(.|\n)*?(<\/script>)/gmi,
+            /(<script type="text\/html" data-help-name="NODENAME">)(.|\n)*?(<\/script>)/gmi,
             /-name="NODENAME">/gmi,
         ],
         to: [

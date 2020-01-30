@@ -4,9 +4,25 @@
             <input type="text" id="node-input-name">
         </div>
 
-        <div class="form-row" title="Adds a msg.topic to input msgs if not already provided">
-            <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
-            <input type="text" id="node-input-topic">
+        <div class="form-row" title="Maximum number of entries allowed in the cache (1-100,000)">
+            <label for="node-input-maxEntries"><i class="fa fa-hand-paper-o"></i> Max. Size</label>
+            <input type="number" id="node-input-maxEntries" step="1" min="1" max="100000">
+            <div class="form-tips">
+                <b><u>WARNING</u></b>: The cache has to be kept in the server's memory.
+                This means that it is all too easy to crash Node-RED by trying to put
+                too much into the cache. Only use larger values (up to the limit of 100,000)
+                with very small messages.
+            </div>
         </div>
 
+        <div class="form-row" title="Select the context store to be used for the cache">
+            <label for="node-input-contextName"><i class="fa fa-database"></i> Context</label>
+            <select id="node-input-contextName"></select>
+            <div id="contextName-hint"></div>
+            <div class="form-tips">
+                The context storage type to use. These are set in <code>settings.js</code>
+                Highlighted selections use persistent storage so that the cache will
+                survive a restart of Node-RED or a reboot of the server.
+            </div>
+        </div>
     </div>

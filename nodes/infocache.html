@@ -1,5 +1,5 @@
 <!--
-    Copyright (c) 2019 Julian Knight (Totally Information)
+    Copyright (c) 2020 Julian Knight (Totally Information)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 ;(function () {
     'use strict'
 
+    //https://nodered.org/docs/creating-nodes/node-html
     /** @typedef {import("node-red").Red} Red */
 
     //#region --------- "global" variables for the panel --------- //
@@ -32,8 +33,35 @@
     /** Node's background color @constant {string} paletteColor */
     var paletteColor  = '#E6E0F8'
     /** Node's icon image */
-    var nodeIcon = 'db.png'
+    var nodeIcon = 'db.png' //'font-awesome/fa-random'
+    /** Default maxEntries value */
+    var defMaxEntries = 10
+    /** Holder for settings/contextStorage (set by validator) {'<name>': {"module":'<type>'}, ...} @type {Object} */
+    var contextStorage = {}
+    /** Holder for settings/context/default (set by validator) @type {string|null} */
+    var contextDefault = null
 
+    //#endregion ------------------------------------------------- //
+
+    //#region ---------------- Utility Functions ----------------- //
+    /** Make sure context storage is known BEFORE editor is available
+     * NOTE: This is called BEFORE oneditprepare when 1st loading the Editor
+     * RED.settings.context doesn't tell us what module is actually in use so we have to get creative
+     */
+    function validateContext(value) {
+        // build context storage vars
+        if ( contextDefault === null ) { // not yet built
+            // this is always set by NR even if settings.js doesn't have anything
+            contextDefault = RED.settings.context.default
+            // If nothing in settings.js, build the structure from the default - otherwise grab it from settings
+            if ( RED.settings.infocacheContextStorage === undefined ) contextStorage[contextDefault] = { 'module' : 'memory' }
+            else contextStorage = RED.settings.infocacheContextStorage
+        }
+
+        // If the value is not in the context store types, that's an error
+        if ( Object.keys(contextStorage).indexOf(value) > -1 ) return true
+        else return false
+    } // -- End of validateMaxEntries() -- //
     //#endregion ------------------------------------------------- //
 
     // Register the node type, defaults and set up the edit fns 
@@ -43,22 +71,60 @@
         category: paletteCategory,
         color: paletteColor,
         defaults: {
-            name: { value: '' },
-            topic: { value: '' },
+            name: { value: '', },
+            maxEntries: { value: defMaxEntries, required: true },
+            contextName: { value: 'default', required: true, validate: validateContext }
         },
         inputs: 1,
         outputs: 1,
         /** @see https://nodered.org/docs/creating-nodes/appearance#icon, @see https://fontawesome.com/v4.7.0/icons/ */
-        icon: nodeIcon, //'font-awesome/fa-random',
+        icon: nodeIcon,
         //paletteLabel: nodeLabel,
-        label: function () { return this.url || this.name || nodeLabel },
+        label: function () { return this.name || nodeLabel },
+
+        //#region ---------- Custom properties ---------- //
+        /** Is the chosen context store memory based? @type {boolean} */
+        //csIsMemory: true,
+        //#endregion -------- Custom properties -------- //
 
         /** Prepares the Editor panel */
         oneditprepare: function () {
             var that = this
 
-            //console.log('RED', RED)
-            console.log('[infocache:oneditprepare] THIS', that)
+            // If the context store selection changes ...
+            $('#node-input-contextName').on('change', function(e) {
+                /** Is the context store memory based? @type {boolean} */
+                var contextIsMemory = contextStorage[this.value].module === 'memory'
+
+                if ( contextIsMemory ) {
+                    $('#contextName-hint').html('You have selected a store that is memory-based, so the cache <b><u>WILL NOT</u></b> be restored on a restart of Node-RED or the server.')
+                } else {
+                    $('#contextName-hint').html('You have selected a store that is persisted to the filling system, so the cache <b><u>WILL</u></b> be restored on a restart of Node-RED or the server.')
+                }
+            })
+
+            /** Populate the context store select tag */
+            var keys = Object.keys(contextStorage)
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i]
+                var module = contextStorage[key].module
+
+                /** Is the context store memory based? @type {boolean} */
+                var contextIsMemory = contextStorage[key].module === 'memory'
+
+                $('#node-input-contextName')
+                    .append(
+                        $('<option></option>')
+                            .attr('value', key)
+                            .attr('selected', key === that.contextName )
+                            .attr('title', (contextIsMemory ? 'WARNING: Not persistent. ' : 'NOTE: Persistent. ') + (key === contextDefault ? 'Default context store. ' : ''))
+                            .text(key + (key === RED.settings.context.default ? '*' : '') + ' (' + module + ')')
+                            .css({
+                                'color': contextIsMemory ? '#99ccff' : '#009900',
+                                'font-weight': contextIsMemory ? 'normal' : 'bolder',
+                            })
+                    )
+            } // --- --- //
 
         }, // ---- End of oneditprepare ---- //
 
@@ -78,22 +144,75 @@
 })()
 </script>
 
-<script type="text/x-red" data-template-name="infocache">
+<script type="text/html" data-template-name="infocache">
     <div id="main-props">
         <div class="form-row">
             <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
             <input type="text" id="node-input-name">
         </div>
 
-        <div class="form-row" title="Adds a msg.topic to input msgs if not already provided">
-            <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
-            <input type="text" id="node-input-topic">
+        <div class="form-row" title="Maximum number of entries allowed in the cache (1-100,000)">
+            <label for="node-input-maxEntries"><i class="fa fa-hand-paper-o"></i> Max. Size</label>
+            <input type="number" id="node-input-maxEntries" step="1" min="1" max="100000">
+            <div class="form-tips">
+                <b><u>WARNING</u></b>: The cache has to be kept in the server's memory.
+                This means that it is all too easy to crash Node-RED by trying to put
+                too much into the cache. Only use larger values (up to the limit of 100,000)
+                with very small messages.
+            </div>
         </div>
 
+        <div class="form-row" title="Select the context store to be used for the cache">
+            <label for="node-input-contextName"><i class="fa fa-database"></i> Context</label>
+            <select id="node-input-contextName"></select>
+            <div id="contextName-hint"></div>
+            <div class="form-tips">
+                The context storage type to use. These are set in <code>settings.js</code>
+                Highlighted selections use persistent storage so that the cache will
+                survive a restart of Node-RED or a reboot of the server.
+            </div>
+        </div>
     </div>
 
 </script>
 
-<script type="text/x-red" data-help-name="infocache">
-<div>HELP!</div>
+<script type="text/html" data-help-name="infocache">
+<p>
+    A general-purpose caching node that saves/replays messages.
+    Is able to use <a href="https://flows.nodered.org/node/node-red-contrib-uibuilder" taget="_blank">uibuilder's</a> cache control messages but is fine to use without uibuilder.
+</p>
+<h3>Input</h3>
+    <p>
+        The whole msg will be stored in the cache.
+        However, several properties will be removed before storage:
+    </p>
+    <dl class="message-properties">
+        <dt>res and req<span class="property-type">object</span></dt>
+        <dd>
+            The <code>res</code> (result) and <code>req</code> (request) properties are created by the ExpressJS web server build-in to Node-RED.
+            They are extremely large and recursive which means that they cannot be serialised in order to save them.
+        </dd>
+        <dt>_auth &amp; _uibAuth<span class="property-type">object</span></dt>
+        <dd>
+            Authorisation and authentication info. May be sensitive so removed from store.
+            Will be added from the control msg (from the client) when a replay is requested.
+        </dd>
+    </dl>
+<h3>Outputs</h3>
+    <p>
+        Standard input messages are passed through without change to the output.
+    </p>
+    <p>
+        uibuilder control messages are not passed through.
+    </p>
+    <p>
+        On a cache replay control request, the requested cache entries are replayed in the requested order (FIFO by default).
+        Replayed messages are not quite exact copies of the original message, see above for the differences.
+    </p>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">string | buffer</span></dt>
+        <dd></dd>
+    </dl>
+<h3>Details</h3>
+<p>Some more information about the node.</p>
 </script>
