@@ -22,6 +22,12 @@ description: >
   to handle the fact that front-ends need to send a trigger on window.load AND on socket connected.
 - Allow reverse replay. Default is first-in-first out (FIFO) but should be able to replay as LIFO (last in, first out).
 - Allow replay of first, last or specific index position only.
+- Update status on new entry, visual warning if nearly full or full.
+
+## Caveats
+
+- Replayed messages are NOT exact copies of the original message. Only key data is saved in the cache. The msg.payload and topic/_socketId/user-id (as needed).
+  - Maybe other properties can be saved in the future but this is complex if we want to avoid costly cloning.
 
 ## Options Needed
 
