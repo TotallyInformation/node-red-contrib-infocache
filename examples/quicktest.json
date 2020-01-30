@@ -1,0 +1,319 @@
+[
+    {
+        "id": "e821b01f.15013",
+        "type": "inject",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 97,
+        "y": 300,
+        "wires": [
+            [
+                "16037128.2025bf"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "63cad08f.61c62",
+        "type": "infocache",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "maxEntries": "10",
+        "contextName": "file",
+        "x": 492,
+        "y": 300,
+        "wires": [
+            [
+                "b8e6b523.68e698"
+            ]
+        ]
+    },
+    {
+        "id": "b8e6b523.68e698",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 672,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "16037128.2025bf",
+        "type": "change",
+        "z": "5cf69d1b.d88c14",
+        "name": "Set Cache",
+        "rules": [],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 212,
+        "y": 300,
+        "wires": [
+            [
+                "63cad08f.61c62"
+            ]
+        ]
+    },
+    {
+        "id": "3ccb49da.afec96",
+        "type": "status",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "scope": [
+            "63cad08f.61c62"
+        ],
+        "x": 500,
+        "y": 200,
+        "wires": [
+            [
+                "31e155e5.417c6a"
+            ]
+        ]
+    },
+    {
+        "id": "abb7e0.bf1f182",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "CACHE FULL",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 882,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "31e155e5.417c6a",
+        "type": "switch",
+        "z": "5cf69d1b.d88c14",
+        "name": "Chk if full",
+        "property": "status.fill",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 680,
+        "y": 200,
+        "wires": [
+            [
+                "abb7e0.bf1f182"
+            ],
+            [
+                "12509427.e2897c"
+            ],
+            [
+                "c521be7f.d313b"
+            ]
+        ],
+        "outputLabels": [
+            "Cache Full",
+            "Cache Nearly Full",
+            "Cache has room"
+        ]
+    },
+    {
+        "id": "12509427.e2897c",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "CACHE NEARLY FULL",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 912,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "c521be7f.d313b",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "CACHE HAS SPACE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 902,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "78098617.0880e8",
+        "type": "inject",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "topic": "Cache-Test-Clear",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 97,
+        "y": 360,
+        "wires": [
+            [
+                "2257ecef.6062e4"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "2257ecef.6062e4",
+        "type": "change",
+        "z": "5cf69d1b.d88c14",
+        "name": "Clear Cache",
+        "rules": [
+            {
+                "t": "set",
+                "p": "uibuilderCtrl",
+                "pt": "msg",
+                "to": "any old string",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "cacheControl",
+                "pt": "msg",
+                "to": "CLEAR",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 212,
+        "y": 360,
+        "wires": [
+            [
+                "63cad08f.61c62",
+                "55a32de1.058234"
+            ]
+        ]
+    },
+    {
+        "id": "55a32de1.058234",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 472,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "295ef805.242a38",
+        "type": "inject",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "topic": "Cache-Test-Replay",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 97,
+        "y": 420,
+        "wires": [
+            [
+                "2d37e469.08cd4c"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "2d37e469.08cd4c",
+        "type": "change",
+        "z": "5cf69d1b.d88c14",
+        "name": "Replay Cache",
+        "rules": [
+            {
+                "t": "set",
+                "p": "uibuilderCtrl",
+                "pt": "msg",
+                "to": "any old string",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "cacheControl",
+                "pt": "msg",
+                "to": "REPLAY",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 222,
+        "y": 420,
+        "wires": [
+            [
+                "1ca8b032.66b41",
+                "63cad08f.61c62"
+            ]
+        ]
+    },
+    {
+        "id": "1ca8b032.66b41",
+        "type": "debug",
+        "z": "5cf69d1b.d88c14",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 472,
+        "y": 420,
+        "wires": []
+    }
+]
