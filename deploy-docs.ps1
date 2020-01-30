@@ -1,16 +1,22 @@
 <#
  # Build and deploy GitHub pages based documentation
+ # npm run builddocs
  #>
 
-rmdir -Path docs/.vuepress/dist -Recurse -Force
-npm run builddocs
+try {
+    rmdir -Path docs/.vuepress/dist -Recurse -Force -ErrorAction "SilentlyContinue"
+} catch {
+    write-host 'docs/.vuepress/dist does not exist'
+}
+vuepress build docs
 cd docs/.vuepress/dist
 git init
+git checkout -b gh-pages
 git add -A
 git commit -m 'deploy'
 git remote add origin https://github.com/TotallyInformation/node-red-contrib-infocache.git
 git branch --set-upstream-to origin/gh-pages
-git push -f -u origin master:gh-pages
+git push -f -u origin gh-pages:gh-pages
 cd ../..
 
 <#
