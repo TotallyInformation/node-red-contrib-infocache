@@ -72,7 +72,7 @@
 
         /** Prepares the Editor panel */
         oneditprepare: function () {
-            var that = this
+            var that = this 
 
             // If the context store selection changes ...
             $('#node-input-contextName').on('change', function(e) {
