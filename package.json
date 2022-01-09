@@ -23,12 +23,6 @@
     },
     "dependencies": {},
     "devDependencies": {
-        "@types/jquery": "*",
-        "@types/node-red": "*",
-        "markdown-it-footnote": "^3.0.2",
-        "markdown-it-task-lists": "^2.1.1",
-        "replace-in-file": "^3.4.4",
-        "vuepress": "^1.2.0"
     },
     "node-red": {
         "version": ">=1",
