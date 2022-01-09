@@ -1,4 +1,7 @@
 # node-red-contrib-infocache
+
+** SUPERSEDED: It is likely that this module will not get developed. I'm adding a new node to the uibuilder module instead. That has been added to the uibuilder vNext branch already and will be published with uibuilder v5.**
+
 Cache &amp; replay messages. Optionally by topic and client or user id. Replay the cache or a part of it on request.
 
 ## Introduction
